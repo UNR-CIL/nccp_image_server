@@ -1,0 +1,17 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+GET	/nccp_images/regions	    controllers.NCCPImageController.regions()
+
+GET	/nccp_images/:region/sites  controllers.NCCPImageController.sites(region : String)
+
+GET	/nccp_images/:region/:site/latest controllers.NCCPImageController.latestImage(region : String, site : String)
+
+GET	/nccp_images/:region/:site/image  controllers.NCCPImageController.image(region : String, site : String, limit : Integer, fromDate : Option[String], toDate : Option[String])
