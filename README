@@ -1,4 +1,93 @@
-This is your new Play application
-=====================================
+NCCP REST-based Image Server
+============================
 
-This file will be packaged with your application, when using `play dist`.
+This Play application implements a REST interface the Nevada Climate
+Change Portal's ftp image server. The URLs currently supported are:
+
+/nccp_images/regions - returns a JSON array of regions that have camera data. Right now those are Snake, Sheep, and Spring.
+
+Example call:
+http GET http://localhost:9000/nccp_images/regions
+
+Response:
+HTTP/1.1 200 OK
+Content-Length: 26
+Content-Type: application/json; charset=utf-8
+
+[
+    "Snake",
+    "Sheep",
+    "Spring"
+]
+
+/nccp_images/:region/sites - returns a JSON array of sites for the given region.
+
+Example call:
+http GET http://localhost:9000/nccp_images/snake/sites
+
+Response:
+HTTP/1.1 200 OK
+Content-Length: 13
+Content-Type: application/json; charset=utf-8
+
+[
+    "1",
+    "2",
+    "3"
+]
+
+/nccp_images/:region/:site/latest - returns a JSON object representing the latest image at the site and region specified.
+
+Example call:
+http GET http://localhost:9000/nccp_images/snake/1/latest
+
+Response:
+HTTP/1.1 200 OK
+Content-Length: 210
+Content-Type: application/json; charset=utf-8
+
+{
+    "date": "2014-01-21",
+    "fileName": "139031652776.jpg",
+    "size": 231531,
+    "time": "15:02:00",
+    "url": "ftp://sensor.nevada.edu/Raw Data Files/Nevada Climate Change Project/snake/Site 1/Camera/Images/16091/139031652776.jpg"
+}
+
+/nccp_images/:region/:site/image - returns a JSON array of objects representing images from the given region and site. This URL accepts the following query string parameters to specify which images to return:
+
+limit - Integer: an upper bound on the number of images to return. This is required. We may choose to limit this value to a range that our servers can handle. If the limit is larger than the number of images in the most recent image folder for the site, the response will consist only of objects describing images in the most recent folder.
+
+Example call:
+http GET http://localhost:9000/nccp_images/snake/1/image?limit=3
+
+Response:
+HTTP/1.1 200 OK
+Content-Length: 633
+Content-Type: application/json; charset=utf-8
+
+[
+    {
+        "date": "2014-01-21",
+        "fileName": "139031652776.jpg",
+        "size": 231531,
+        "time": "15:02:00",
+        "url": "ftp://sensor.nevada.edu/Raw Data Files/Nevada Climate Change Project/snake/Site 1/Camera/Images/16091/139031652776.jpg"
+    },
+    {
+        "date": "2014-01-21",
+        "fileName": "139031653619.jpg",
+        "size": 86427,
+        "time": "15:02:00",
+        "url": "ftp://sensor.nevada.edu/Raw Data Files/Nevada Climate Change Project/snake/Site 1/Camera/Images/16091/139031653619.jpg"
+    },
+    {
+        "date": "2014-01-21",
+        "fileName": "139031646689.jpg",
+        "size": 124627,
+        "time": "15:01:00",
+        "url": "ftp://sensor.nevada.edu/Raw Data Files/Nevada Climate Change Project/snake/Site 1/Camera/Images/16091/139031646689.jpg"
+    }
+]
+
+
