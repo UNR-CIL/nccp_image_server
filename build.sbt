@@ -1,11 +1,12 @@
-name := "image_rev_prox"
+name := "NCCP Image REST Server"
 
-version := "1.0-SNAPSHOT"
+version := "0.0.1"
+
+scalaVersion := "2.10.2"
 
 libraryDependencies ++= Seq(
-  jdbc,
-  anorm,
-  cache
-)     
+  cache,
+  "commons-net" % "commons-net" % "3.3"
+)
 
 play.Project.playScalaSettings
